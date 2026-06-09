@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchTasks } from "../api/taskApi";
+import { fetchTasks, fetchFilterOptions } from "../api/taskApi";
 import { taskQueryKeys } from "../api/queryKeys";
 import { TaskReviewRecord } from "../model/TaskReviewRecord";
 import { ColumnarTaskData } from "../model/ColumnarTaskData";
@@ -51,6 +51,18 @@ export function useTask(id: TaskId) {
 
       return new TaskReviewRecord(row);
     }
+  });
+}
+
+// Concept: server-driven filter options hook.
+// What it means: calls GET /tasks/filters once on mount and caches the result permanently
+// for the session (staleTime: Infinity). QueuePage uses this to populate filter dropdowns
+// with the actual priority/status values that exist in the backend data.
+export function useFilterOptions() {
+  return useQuery({
+    queryKey: taskQueryKeys.filterOptions,
+    queryFn: fetchFilterOptions,
+    staleTime: Infinity,
   });
 }
 

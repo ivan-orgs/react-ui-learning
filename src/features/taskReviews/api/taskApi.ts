@@ -1,6 +1,7 @@
 import { http } from "../../../shared/api/httpClient";
 import type {
   ApiTaskResponse,
+  FilterOptions,
   TaskFilters,
   TaskId,
   ReviewStatus
@@ -11,6 +12,15 @@ import type {
 // Seen in app: QueuePage changes priority/status filters, and this function calls /tasks with params.
 export async function fetchTasks(filters: TaskFilters = {}) {
   const response = await http.get<ApiTaskResponse>("/tasks", { params: filters });
+  return response.data;
+}
+
+// Concept: server-driven filter options.
+// What it means: calls GET /tasks/filters to get the distinct priority/status values
+// that exist in the backend data, so the UI dropdowns stay in sync with the server.
+// Seen in app: QueuePage calls this once on mount to populate Priority and Status dropdowns.
+export async function fetchFilterOptions(): Promise<FilterOptions> {
+  const response = await http.get<FilterOptions>("/tasks/filters");
   return response.data;
 }
 

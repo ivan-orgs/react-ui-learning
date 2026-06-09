@@ -1,11 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../../shared/ui/Button";
 import { PageSkeleton } from "../../../shared/ui/Skeleton";
 import { Surface } from "../../../shared/ui/Surface";
 import { Text } from "../../../components/wabi";
 import { isPriorityLevel, type TaskFilters, type ReviewStatus, type PriorityLevel } from "../types";
-import { useTasks, useColumnarTasks } from "../hooks/useTasks";
+import { useTasks, useColumnarTasks, useFilterOptions } from "../hooks/useTasks";
 import { AgTaskGrid, type TaskGridRow } from "../components/AgTaskGrid";
 import styles from "./QueuePage.module.css";
 
@@ -20,9 +19,14 @@ export default function QueuePage() {
 
   // Concept: useState with string literal unions.
   // What it means: filter state can only contain valid priority/status values.
-  // Seen in app: filter buttons change the backend request params.
+  // Seen in app: filter dropdowns change the backend request params.
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("ALL");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
+
+  // Concept: server-driven filter options.
+  // What it means: GET /tasks/filters is called once on mount and cached permanently.
+  // The dropdown option lists come entirely from the backend, not from hard-coded arrays.
+  const { data: filterOptions, isLoading: filtersLoading } = useFilterOptions();
 
   // Concept: backend filter request object.
   // What it means: UI state is converted to params for the API instead of filtering locally.
@@ -30,7 +34,7 @@ export default function QueuePage() {
   const filters = useMemo<TaskFilters>(
     () => ({
       ...(priorityFilter === "ALL" ? {} : { priority: priorityFilter }),
-      ...(statusFilter === "ALL" ? {} : { status: statusFilter })
+      ...(statusFilter === "ALL" ? {} : { status: statusFilter }),
     }),
     [priorityFilter, statusFilter]
   );
@@ -64,7 +68,7 @@ export default function QueuePage() {
   // Concept: loading state and skeleton UI.
   // What it means: show a lightweight placeholder while the first backend request is running.
   // Seen in app: on slow initial loads, the queue shows "Loading task queue".
-  if (isLoading) {
+  if (isLoading || filtersLoading) {
     return <PageSkeleton title="Loading task queue" />;
   }
 
@@ -79,56 +83,81 @@ export default function QueuePage() {
     );
   }
 
+  const isFiltered = priorityFilter !== "ALL" || statusFilter !== "ALL";
+
   return (
     <section className={styles.page}>
-      <div className={styles.toolbar}>
-        <div>
-          <h2>Task queue</h2>
-          <p>Click any row to navigate to a detail route.</p>
-          {isFetching ? <Text tone="muted">Fetching filtered backend data...</Text> : null}
+      {/* ── Filter bar ───────────────────────────────────────────────────── */}
+      <div className={styles.filterBar}>
+        <div className={styles.filterBarLeft}>
+          <h2 className={styles.pageTitle}>Task Queue</h2>
+          <p className={styles.pageSubtitle}>Click any row to view task details.</p>
         </div>
-        <div className={styles.actions}>
-          {/* Concept: backend-driven filters.
-              What it means: buttons update state, state changes query params, and backend returns matching rows.
-              Seen in app: combine High priority with Pending/Approved/Rejected. */}
-          <Button
-            variant={priorityFilter === "ALL" ? "primary" : "secondary"}
-            onClick={() => setPriorityFilter("ALL")}
-          >
-            All priorities
-          </Button>
-          <Button
-            variant={priorityFilter === "HIGH" ? "primary" : "secondary"}
-            onClick={() => setPriorityFilter("HIGH")}
-          >
-            High priority
-          </Button>
-          <Button
-            variant={statusFilter === "ALL" ? "primary" : "secondary"}
-            onClick={() => setStatusFilter("ALL")}
-          >
-            All statuses
-          </Button>
-          <Button
-            variant={statusFilter === "PENDING" ? "primary" : "secondary"}
-            onClick={() => setStatusFilter("PENDING")}
-          >
-            Pending
-          </Button>
-          <Button
-            variant={statusFilter === "APPROVED" ? "primary" : "secondary"}
-            onClick={() => setStatusFilter("APPROVED")}
-          >
-            Approved
-          </Button>
-          <Button
-            variant={statusFilter === "REJECTED" ? "primary" : "secondary"}
-            onClick={() => setStatusFilter("REJECTED")}
-          >
-            Rejected
-          </Button>
+
+        <div className={styles.filters}>
+          {/* Concept: server-driven filter dropdowns.
+              What it means: option lists come from GET /tasks/filters, so they always
+              reflect the real values that exist in the backend data. */}
+          <div className={styles.filterGroup}>
+            <label htmlFor="priority-filter" className={styles.filterLabel}>
+              Priority
+            </label>
+            <select
+              id="priority-filter"
+              className={styles.filterSelect}
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value as PriorityFilter)}
+            >
+              <option value="ALL">All priorities</option>
+              {filterOptions?.priorities.map((p) => (
+                <option key={p} value={p}>
+                  {p.charAt(0) + p.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label htmlFor="status-filter" className={styles.filterLabel}>
+              Status
+            </label>
+            <select
+              id="status-filter"
+              className={styles.filterSelect}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+            >
+              <option value="ALL">All statuses</option>
+              {filterOptions?.statuses.map((s) => (
+                <option key={s} value={s}>
+                  {s.charAt(0) + s.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {isFiltered && (
+            <button
+              className={styles.clearBtn}
+              onClick={() => {
+                setPriorityFilter("ALL");
+                setStatusFilter("ALL");
+              }}
+              aria-label="Clear all filters"
+            >
+              ✕ Clear
+            </button>
+          )}
         </div>
       </div>
+
+      {/* ── Status strip ─────────────────────────────────────────────────── */}
+      {isFetching && (
+        <div className={styles.fetchingBanner} role="status">
+          Fetching filtered data from server…
+        </div>
+      )}
+
       {/* Concept: empty state.
           What it means: if the backend returns no rows for a filter combination, show a friendly fallback.
           Seen in app: choose High priority + Approved to see no matching rows. */}
@@ -145,12 +174,9 @@ export default function QueuePage() {
         </Surface>
       ) : (
         <Surface title="No rows">
-          <p>No tasks match the selected backend filters.</p>
+          <p>No tasks match the selected filters.</p>
         </Surface>
       )}
     </section>
   );
 }
-
-
-

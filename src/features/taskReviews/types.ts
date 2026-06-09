@@ -17,6 +17,15 @@ export interface TaskFilters {
   status?: ReviewStatus;
 }
 
+// Concept: server-driven filter options.
+// What it means: the shape returned by GET /tasks/filters, listing the distinct
+// priority levels and review statuses that actually exist in the backend data.
+// Seen in app: QueuePage calls this once on mount to populate its filter dropdowns.
+export interface FilterOptions {
+  priorities: PriorityLevel[];
+  statuses: ReviewStatus[];
+}
+
 // Concept: interface.
 // What it means: describes the shape of a raw API row.
 // Seen in app: Spring Boot task rows must match this shape before the UI can use them.

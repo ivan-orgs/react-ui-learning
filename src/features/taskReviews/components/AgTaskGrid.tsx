@@ -86,6 +86,9 @@ export function AgTaskGrid({ rows, onOpen }: AgTaskGridProps) {
         domLayout="autoHeight"
         rowData={rows}
         rowSelection={{ mode: "singleRow" }}
+        pagination={true}
+        paginationPageSize={10}
+        paginationPageSizeSelector={[5, 10, 20, 50]}
         onGridReady={autoSize}
         onRowClicked={handleRowClick}
       />

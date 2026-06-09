@@ -3,42 +3,127 @@
   gap: 18px;
 }
 
-/* Concept: flex alignment.
-   What it means: toolbar content is aligned horizontally and spaced apart.
-   Seen in app: title text stays left, filter buttons stay right on desktop. */
-.toolbar {
-  align-items: center;
+/* ── Filter bar ────────────────────────────────────────────────────── */
+.filterBar {
   display: flex;
-  gap: 16px;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.toolbar h2 {
+.filterBarLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
   font-size: 1.35rem;
   margin: 0;
 }
 
-.toolbar p {
+.pageSubtitle {
   color: #667383;
-  margin: 6px 0 0;
+  margin: 0;
+  font-size: 0.875rem;
 }
 
-.actions {
+/* ── Filter controls ───────────────────────────────────────────────── */
+.filters {
   display: flex;
+  align-items: flex-end;
   flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
+  gap: 12px;
 }
 
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filterLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #667383;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.filterSelect {
+  height: 36px;
+  padding: 0 32px 0 10px;
+  border: 1.5px solid #d1d9e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667383' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  appearance: none;
+  font-size: 0.875rem;
+  color: #1a202c;
+  cursor: pointer;
+  min-width: 148px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filterSelect:hover {
+  border-color: #a0aec0;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+/* ── Clear button ──────────────────────────────────────────────────── */
+.clearBtn {
+  height: 36px;
+  padding: 0 14px;
+  border: 1.5px solid #e53e3e;
+  border-radius: 8px;
+  background: transparent;
+  color: #e53e3e;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.clearBtn:hover {
+  background: #e53e3e;
+  color: #ffffff;
+}
+
+/* ── Fetching banner ───────────────────────────────────────────────── */
+.fetchingBanner {
+  background: #ebf4ff;
+  border: 1px solid #bee3f8;
+  border-radius: 8px;
+  color: #2b6cb0;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
 @media (max-width: 680px) {
-  .toolbar {
-    align-items: flex-start;
+  .filterBar {
     flex-direction: column;
   }
 
-  .actions {
-    justify-content: flex-start;
+  .filters {
+    width: 100%;
+  }
+
+  .filterSelect {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .filterGroup {
+    flex: 1;
   }
 }
-
-
