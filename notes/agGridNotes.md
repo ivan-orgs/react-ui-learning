@@ -280,34 +280,62 @@ const openTask = useCallback(
 
 **Why `onOpen` and not `onRowClicked`?**
 
-`onRowClicked` is AG Grid's own event. `onOpen` is a **custom prop** on the `AgTaskGrid` wrapper component. The two are connected inside `AgTaskGrid`:
+First, understand what `AgTaskGrid` is:
 
-```tsx
-// AgTaskGrid.tsx — internally bridges the two:
-function handleRowClick(event: RowClickedEvent<TaskGridRow>) {
-  if (event.data) {
-    onOpen(event.data); // ← calls the prop QueuePage passed in
-  }
-}
+- **`<AgGridReact>`** is the actual AG Grid component from the library. You configure it with `columnDefs`, `rowData`, `onRowClicked`, etc.
+- **`<AgTaskGrid>`** is **our own custom component** that wraps `<AgGridReact>`. It lives in `AgTaskGrid.tsx` and we wrote it ourselves.
 
-<AgGridReact
-  onRowClicked={handleRowClick} // AG Grid event → calls our handler
-/>
+```
+QueuePage
+  └── <AgTaskGrid rows={rows} onOpen={openTask} />   ← our component
+        └── <AgGridReact onRowClicked={handleRowClick} ... />  ← AG Grid's component
 ```
 
-So the chain is:
+`AgTaskGrid` hides the AG Grid details inside itself and exposes a simpler, app-specific API. The only thing `QueuePage` needs to care about is: "call this function when a row is opened". So `AgTaskGrid` exposes `onOpen` as its prop.
+
+Internally, `AgTaskGrid` listens to AG Grid's `onRowClicked` and calls `onOpen` when it fires:
+
+```tsx
+// Inside AgTaskGrid.tsx:
+interface AgTaskGridProps {
+  rows: TaskGridRow[];
+  onOpen: (row: TaskGridRow) => void;  // ← custom prop we defined
+}
+
+export function AgTaskGrid({ rows, onOpen }: AgTaskGridProps) {
+
+  function handleRowClick(event: RowClickedEvent<TaskGridRow>) {
+    if (event.data) {
+      onOpen(event.data);  // ← bridges AG Grid's event to our prop
+    }
+  }
+
+  return (
+    <AgGridReact
+      rowData={rows}
+      onRowClicked={handleRowClick}  // ← AG Grid's own event
+      ...
+    />
+  );
+}
+```
+
+So the full chain when a row is clicked:
+
 ```
 User clicks a row
     ↓
-AG Grid fires onRowClicked → handleRowClick(event)
+<AgGridReact> fires onRowClicked → handleRowClick(event)   [inside AgTaskGrid]
     ↓
-handleRowClick calls onOpen(event.data)
+handleRowClick calls onOpen(event.data)                    [our prop]
     ↓
-QueuePage's openTask runs → navigate('/task/TASK-101')
+QueuePage's openTask(row) runs → navigate('/task/TASK-101')
 ```
 
-`QueuePage` never talks to AG Grid directly — it only talks to `AgTaskGrid` through its `onOpen` prop.
+`QueuePage` never imports or uses `<AgGridReact>` directly. It only uses `<AgTaskGrid>` and passes `openTask` as `onOpen`.
+
 ---
+
 
 ## Checks table — a second, simpler grid
 
