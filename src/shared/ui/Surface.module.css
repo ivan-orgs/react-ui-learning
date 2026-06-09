@@ -1,0 +1,13 @@
+.surface {
+  background: #ffffff;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.surface h2 {
+  font-size: 1.1rem;
+  margin: 0 0 14px;
+}
+
+

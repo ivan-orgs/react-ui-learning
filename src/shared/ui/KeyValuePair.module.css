@@ -1,0 +1,17 @@
+.pair {
+  display: grid;
+  gap: 4px;
+}
+
+.pair dt {
+  color: #667383;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pair dd {
+  margin: 0;
+}
+
+

@@ -1,0 +1,10 @@
+.grid {
+  min-height: 260px;
+  width: 100%;
+}
+
+.grid :global(.ag-row) {
+  cursor: pointer;
+}
+
+

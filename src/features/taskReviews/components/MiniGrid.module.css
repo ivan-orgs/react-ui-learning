@@ -1,0 +1,34 @@
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #d9dee7;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th {
+  background: #f0f3f7;
+  color: #516070;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.table tr {
+  cursor: pointer;
+}
+
+.table tbody tr:hover,
+.table tbody tr:focus {
+  background: #eef6f3;
+}
+
+

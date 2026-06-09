@@ -1,0 +1,30 @@
+.page {
+  background: #ffffff;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.page p {
+  font-weight: 700;
+  margin: 0;
+}
+
+.line {
+  animation: pulse 1.2s infinite ease-in-out;
+  background: #e6ebf1;
+  border-radius: 8px;
+  display: block;
+  height: 18px;
+  max-width: 640px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+

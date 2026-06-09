@@ -1,0 +1,92 @@
+.page {
+  display: grid;
+  gap: 18px;
+}
+
+.heading,
+.pairs,
+.layout,
+.widgets,
+.sectionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.heading {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.eyebrow {
+  color: #667383;
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+/* Concept: box model.
+   What it means: border, padding, radius, and background create a visual container.
+   Seen in app: detail metadata appears inside a bordered white strip. */
+.pairs {
+  background: #ffffff;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0;
+  padding: 16px;
+}
+
+.layout {
+  align-items: flex-start;
+}
+
+.content {
+  display: grid;
+  flex: 1;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* Concept: CSS grid responsive columns.
+   What it means: repeat(3, minmax(0, 1fr)) creates three equal widget columns.
+   Seen in app: priority widgets appear side by side on desktop. */
+.widgets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.layout aside {
+  flex: 0 0 300px;
+}
+
+.sectionButtons button {
+  background: #ffffff;
+  border: 1px solid #cfd6df;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .layout aside {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .widgets {
+    grid-template-columns: 1fr;
+  }
+}
+
+

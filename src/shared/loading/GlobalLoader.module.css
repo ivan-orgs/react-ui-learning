@@ -1,0 +1,8 @@
+.loader {
+  background: #17202a;
+  color: #ffffff;
+  font-size: 0.85rem;
+  padding: 6px clamp(16px, 4vw, 48px);
+}
+
+

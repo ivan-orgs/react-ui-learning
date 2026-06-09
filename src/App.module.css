@@ -1,0 +1,20 @@
+.shell {
+  min-height: 100vh;
+  background: #f6f7f9;
+  color: #17202a;
+}
+
+.main {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 24px clamp(16px, 4vw, 48px) 40px;
+}
+
+.footer {
+  color: #667383;
+  font-size: 0.9rem;
+  padding: 0 clamp(16px, 4vw, 48px) 28px;
+  text-align: center;
+}
+
+

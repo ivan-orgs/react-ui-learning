@@ -1,0 +1,36 @@
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.stack > div {
+  display: grid;
+  gap: 8px;
+}
+
+.link {
+  color: #0f6b52;
+  font-weight: 800;
+  width: fit-content;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav a {
+  border: 1px solid #c8d2df;
+  border-radius: 8px;
+  color: #314052;
+  font-weight: 800;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.nav a[aria-current="page"] {
+  background: #17202a;
+  border-color: #17202a;
+  color: #ffffff;
+}

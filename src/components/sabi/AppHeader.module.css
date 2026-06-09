@@ -1,0 +1,62 @@
+/* Concept: CSS module.
+   What it means: these class names are scoped to AppHeader, preventing class collisions.
+   Seen in app: header styles do not accidentally affect other .header classes. */
+.header {
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #d9dee7;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding: 20px clamp(16px, 4vw, 48px);
+}
+
+.header h1 {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1.1;
+  margin: 4px 0 0;
+}
+
+.eyebrow {
+  color: #516070;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Concept: flex layout and gap.
+   What it means: flex places nav links in a row, and gap spaces them without margins.
+   Seen in app: Queue and Concepts sit beside each other in the header. */
+.nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav a {
+  border-radius: 8px;
+  color: #314052;
+  font-weight: 700;
+  padding: 10px 12px;
+  text-decoration: none;
+}
+
+/* Concept: attribute selector and active route styling.
+   What it means: NavLink adds aria-current="page" to the active link.
+   Seen in app: the current page gets a dark background in the nav. */
+.nav a[aria-current="page"] {
+  background: #17202a;
+  color: #ffffff;
+}
+
+/* Concept: responsive layout with media queries.
+   What it means: layout changes when the screen is narrow.
+   Seen in app: resize the browser and header items stack vertically. */
+@media (max-width: 680px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+

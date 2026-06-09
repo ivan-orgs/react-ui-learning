@@ -1,0 +1,17 @@
+.text {
+  margin: 0;
+}
+
+.default {
+  color: #17202a;
+}
+
+.muted {
+  color: #667383;
+}
+
+.danger {
+  color: #9b2c26;
+}
+
+

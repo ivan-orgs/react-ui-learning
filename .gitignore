@@ -1,0 +1,56 @@
+
+# Node.js
+node_modules/
+dist/
+/.vite/
+*.tgz
+
+# Vite / TypeScript
+public/
+.vite/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment files
+.env
+.env.*.local
+.local
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Test coverage
+coverage/
+/.nyc_output/
+
+# Build output
+out/
+
+# Storybook
+storybook-static/
+
+# Misc
+.cache/
+.pnp.*
+.yarn/*
+
+# Keep extensions recommendation file
+!.vscode/extensions.json
+
+

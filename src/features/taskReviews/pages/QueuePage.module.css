@@ -1,0 +1,44 @@
+.page {
+  display: grid;
+  gap: 18px;
+}
+
+/* Concept: flex alignment.
+   What it means: toolbar content is aligned horizontally and spaced apart.
+   Seen in app: title text stays left, filter buttons stay right on desktop. */
+.toolbar {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.toolbar h2 {
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.toolbar p {
+  color: #667383;
+  margin: 6px 0 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 680px) {
+  .toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}
+
+
